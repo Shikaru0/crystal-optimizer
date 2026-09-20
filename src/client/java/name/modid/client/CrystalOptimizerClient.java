@@ -1,7 +1,10 @@
 package name.modid.client;
 
+import name.modid.client.config.CrystalOptimizerConfig;
 import name.modid.client.network.CrystalOptimizerNetwork;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.block.Block;
@@ -11,7 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.item.Items;
-import net.minecraft.util.ActionResult;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -26,9 +29,18 @@ public class CrystalOptimizerClient implements ClientModInitializer {
 	public static int hitCount = 0;
 	public static int breakingBlockTick = 0;
 
-	@Override
+	private static CrystalOptimizerConfig config;
+
+	public static CrystalOptimizerConfig getConfig() {
+		return config;
+	}
+
+    @Override
 	public void onInitializeClient() {
 		mc = MinecraftClient.getInstance();
+
+		config = new CrystalOptimizerConfig();
+		config.load();
 
 		CrystalOptimizerNetwork network = new CrystalOptimizerNetwork();
 		network.register();
@@ -37,10 +49,22 @@ public class CrystalOptimizerClient implements ClientModInitializer {
 			serverOptedOut = false;
 			ClientPlayNetworking.send(new CrystalOptimizerNetwork.JoinPayload());
 		}));
+
+		ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) ->
+				dispatcher.register(ClientCommandManager.literal("crystaloptimizer")
+						.then(ClientCommandManager.literal("toggle")
+								.executes(context -> {
+									config.setEnabled(!config.isEnabled());
+
+									context.getSource().sendFeedback(Text.literal("crystaloptimizer:" + (config.isEnabled() ? "Enabled" : "Disabled")));
+									return 1;
+								})))));
 	}
 
 	public static void useOwnTicks() {
 		if (serverOptedOut) return;
+
+		if (!config.isEnabled()) return;
 
 		if (mc == null || mc.player == null) return;
 
@@ -148,12 +172,12 @@ public class CrystalOptimizerClient implements ClientModInitializer {
 		setPacket(hitVec, direction);
 	}
 
-	private static ActionResult setPacket(Vec3d hitVec, Direction direction) {
+	private static void setPacket(Vec3d hitVec, Direction direction) {
 		BlockPos blockPos = new BlockPos((int) hitVec.x, (int) hitVec.y, (int) hitVec.z);
 		BlockHitResult blockHitResult = new BlockHitResult(hitVec, direction, blockPos, false);
         assert mc.interactionManager != null;
         assert mc.player != null;
-        return mc.interactionManager.interactBlock(
+		mc.interactionManager.interactBlock(
 				mc.player,
 				mc.player.getActiveHand(),
 				blockHitResult

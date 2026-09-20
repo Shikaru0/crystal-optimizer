@@ -21,6 +21,7 @@ public class EndCrystalItemMixin {
     @Inject(method = {"useOnBlock"}, at = {@At("HEAD")}, cancellable = true)
     private void modifyDecrementAmount(net.minecraft.item.ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         if (CrystalOptimizerClient.serverOptedOut) return;
+        if (!CrystalOptimizerClient.getConfig().isEnabled()) return;
 
         assert MinecraftClient.getInstance().player != null;
         var mainStack = MinecraftClient.getInstance().player.getMainHandStack();

@@ -14,6 +14,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = {"doItemUse"}, at = {@At("HEAD")}, cancellable = true)
     private void onDoItemUse(CallbackInfo ci) {
         if (CrystalOptimizerClient.serverOptedOut) return;
+        if (!CrystalOptimizerClient.getConfig().isEnabled()) return;
         if (MinecraftClient.getInstance().player == null) return;
         ItemStack mainStack = MinecraftClient.getInstance().player.getMainHandStack();
         if (mainStack.isOf(Items.END_CRYSTAL)) {
