@@ -3,15 +3,15 @@
 	"id": "crystal-optimizer",
 	"version": "${version}",
 	"name": "crystal-optimizer",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Optimizes client-sided packets related to Crystal PvP",
 	"authors": [
-		"Me!"
+		"Shikaru0"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Shikaru0",
+		"sources": "https://github.com/Shikaru0/crystal-optimizer"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/crystal-optimizer/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -30,7 +30,7 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.19.5",
+		"fabricloader": ">=0.16.4",
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
