@@ -3,7 +3,10 @@
 	"package": "name.modid.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"ClientPlayerEntityMixin",
+		"EndCrystalItemMixin",
+		"ItemStackMixin",
+		"MinecraftClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
