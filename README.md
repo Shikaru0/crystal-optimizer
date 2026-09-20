@@ -1,9 +1,14 @@
 # crystal-optimizer
+Optimizes client-sided packets related to Crystal PvP
 
-## Setup
+## What is it?
+A lightweight Fabric mod for crystal PvP.
+Allows 2 attacks per tick (1 if ping <50ms) on crystals by removing entity client-side after first hit.
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## Server opt-out
+Uses same opt-out implementation as [fast-xp](https://github.com/Shikaru0/fast-xp),
+but with its own id:
+```java
+public static final CustomPayload.Id<OptOutPayload> ID =
+new CustomPayload.Id<>(Identifier.of("crystaloptimizer", "opt_out"));
+```
