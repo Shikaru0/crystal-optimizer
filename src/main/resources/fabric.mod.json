@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"name.modid.client.CrystalOptimizerClient"
+		],
+		"modmenu": [
+			"name.modid.client.config.CrystalOptimizerModMenuIntegration"
 		]
 	},
 	"mixins": [
